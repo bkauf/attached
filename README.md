@@ -1,29 +1,29 @@
-## AWS EKS
+## Attach a Cluster to GCP Anthos
 ```bash
-export CLUSTER_NAME=""
+export CLUSTER_NAME="education-eks-6zZPtpwc"
 
 
 ```
 
-1.  EKS 
+###  EKS 
 ```bash
-export CLUSTER_REGION="us-east-2"
+export AWS_REGION="us-east-2"
 aws eks --region $CLUSTER_REGION update-kubeconfig --name $CLUSTER_NAME
 ```
-1. AKS
 
-### Register the Cluster
+#### Register the Cluster
 1. Get the current context which should be the cluster to register
 ```bash
-export KUBECONFIG_CONTEXT= $(kubectl config current-context) 
+export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
+export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text)
 ```
 
 Register the Cluster
 
 ```bash
- gcloud container hub memberships register $CLUSTER_NAME \
-   --context=KUBECONFIG_CONTEXT \
+ gcloud container hub memberships register eks-attached \
+   --context=$KUBECONFIG_CONTEXT \
    --kubeconfig="~/.kube/config" \
    --enable-workload-identity \
-   --has-private-issuer
+  --public-issuer-url=$OIDC_URL
    ```
