@@ -8,7 +8,7 @@ export CLUSTER_NAME="education-eks-6zZPtpwc"
 ###  EKS 
 ```bash
 export AWS_REGION="us-east-2"
-aws eks --region $CLUSTER_REGION update-kubeconfig --name $CLUSTER_NAME
+aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
 ```
 
 #### Register the Cluster
