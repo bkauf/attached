@@ -91,7 +91,7 @@ gcloud alpha container hub memberships generate-gateway-rbac  \
 --membership=$MEMBERSHIP_NAME \
 --role=clusterrole/cluster-admin \
 --users=$ADMIN_EMAILS \
---project=multi-cloud-334222 \
+--project=$PROJECT_ID \
 --kubeconfig="~/.kube/config" \
 --context=$KUBECONFIG_CONTEXT\
 --apply
