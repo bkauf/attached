@@ -116,12 +116,12 @@ export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_RE
 
 aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
 
-gcloud alpha container attached clusters register $CLUSTER_NAME \
+gcloud alpha container attached clusters register $MEMBERSHIP_NAME \
   --location=us-east4 \
-  --fleet-project=PROJECT_NUMBER \
-  --platform-version=1.22 \
+  --fleet-project=$PROJECT_NUMBER \
+  --platform-version=1.22.0-gke.1 \
   --distribution=eks \
-  --issuer-url=$ISSUER_URL \
+  --issuer-url=$OIDC_URL \
   --context=$KUBECONFIG_CONTEXT \
   --admin-users=$ADMIN_EMAILS
   
