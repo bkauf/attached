@@ -102,3 +102,28 @@ Take the output yaml and apply it to the cluster. Then you can connect with a ne
 gcloud container hub memberships get-credentials $MEMBERSHIP_NAME
 kubectl get nodes
 ```
+
+### V2 EKS Install
+```sh
+
+export ADMIN_EMAILS="example@example.com"
+export CLUSTER_NAME="education-eks-6zZPtpwc"
+export MEMBERSHIP_NAME="eks-attached-v2"
+export AWS_REGION="us-east-2"
+export PROJECT_NUMBER="xxxxxx"
+
+aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+
+gcloud alpha container attached clusters register $CLUSTER_NAME \
+  --location=us-east4 \
+  --fleet-project=PROJECT_NUMBER \
+  --platform-version=1.22 \
+  --distribution=eks \
+  --issuer-url=$ISSUER_URL \
+  --context=$KUBECONFIG_CONTEXT \
+  --admin-users=$ADMIN_EMAILS
+  
+  
+  [--kubeconfig=KUBECONFIG_PATH] \
+  [--description=DESCRIPTION]
+```
