@@ -111,6 +111,8 @@ export CLUSTER_NAME="education-eks-6zZPtpwc"
 export MEMBERSHIP_NAME="eks-attached-v2"
 export AWS_REGION="us-east-2"
 export PROJECT_NUMBER="xxxxxx"
+export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
+export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text)
 
 aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
 
