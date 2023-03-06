@@ -36,7 +36,7 @@ export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_RE
 ```
 
 ### AKS 
-a. [OIDC Issuer Feature in preview](https://docs.microsoft.com/en-us/azure/aks/cluster-configuration#register-the-enableoidcissuerpreview-feature-flag)
+a. Supply your Resource Group and get the OIDC config.  [OIDC Issuer Feature in preview](https://docs.microsoft.com/en-us/azure/aks/cluster-configuration#register-the-enableoidcissuerpreview-feature-flag)
 ```
 export CLUSTER_RG=""
 az aks get-credentials --resource-group $CLUSTER_RG --name $CLUSTER_NAME
