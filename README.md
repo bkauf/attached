@@ -1,9 +1,10 @@
 ## Attach a Cluster to GCP Anthos
 
 ### Prerequisites 
-a. Enter the following configuration details for your attached cluster
+a. Enter the following configuration details for your attached cluster. The MEMBERSHIP_NAME is the name that will show up in the GCP Console. The cluster name is what shows up in the EKS or AKS console. For non EKS/AKS installs refer to V1 installation instructions below. 
 ```bash
-export MEMBERSHIP_NAME="Attached Cluster" // this is the name that shows up in the GCP console for this cluster
+export MEMBERSHIP_NAME="Attached Cluster" 
+export CLUSTER_NAME=""
 export ADMIN_EMAILS="example@example.com"
 export GCP_PROJECT_NUMBER="xxxxxx"
 export KUBECONFIG_PATH="~/.kube/config
@@ -26,7 +27,6 @@ export PLATFORM_VERSION=""
 Login to your EKS cluster and get the OIDC config
 ```bash
 export AWS_REGION="us-east-"
-export CLUSTER_NAME=""
 aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
 export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text)
 
@@ -36,7 +36,6 @@ export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_RE
 a. [OIDC Issuer Feature in preview](https://docs.microsoft.com/en-us/azure/aks/cluster-configuration#register-the-enableoidcissuerpreview-feature-flag)
 ```
 export CLUSTER_RG=""
-export CLUSTER_NAME=""
 az aks get-credentials --resource-group $CLUSTER_RG --name $CLUSTER_NAME
 ```
 b. Get the current context which should be the cluster to register
@@ -77,12 +76,19 @@ gcloud container attached clusters register $MEMBERSHIP_NAME \
   --kubeconfig=KUBECONFIG_PATH \
   --description="Attached Cluster"
 ```
+c. Use the connect gateway to login to the cluster through Google Cloud
+
+```bash
+gcloud container hub memberships get-credentials $MEMBERSHIP_NAME
+kubectl get nodes
+```
+
 
 
 
 ## V1 Attached Cluster Version - *Register non EKS/AKS clusters*
 
-```bash
+a. ```bash
  gcloud container hub memberships register $MEMBERSHIP_NAME \
    --context=$KUBECONFIG_CONTEXT \
    --kubeconfig="~/.kube/config" \
@@ -91,7 +97,7 @@ gcloud container attached clusters register $MEMBERSHIP_NAME \
    ```
 
 
-#### Connect to the cluster with the Connect Gateway(Optional)
+b.  Connect to the cluster with the Connect Gateway( V1 Clusters only,)
 Use the following gcloud command to generate the nessessary impersonation rule and clusterrolebindings to authorize a GCP user to connect through the connect gateway. Replace [example@example.com] with a list of emails comma seperated. 
 
 ```bash
