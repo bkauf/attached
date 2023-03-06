@@ -69,7 +69,7 @@ gcloud container attached clusters register $MEMBERSHIP_NAME \
   --issuer-url=$OIDC_URL \
   --context=$KUBECONFIG_CONTEXT \
   --admin-users=$ADMIN_EMAILS \
-  --kubeconfig=KUBECONFIG_PATH \
+  --kubeconfig=$KUBECONFIG_PATH \
   --description="Attached Cluster"
 ```
 d. Use the connect gateway to login to the cluster through Google Cloud
