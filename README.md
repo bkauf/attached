@@ -1,29 +1,31 @@
 ## Attach a Cluster to GCP Anthos
 
 ### Prerequisites 
-Enter the following configuration details for your attached cluster
+a. Enter the following configuration details for your attached cluster
 ```bash
 export MEMBERSHIP_NAME="Attached Cluster" // this is the name that shows up in the GCP console for this cluster
 export ADMIN_EMAILS="example@example.com"
 export GCP_PROJECT_NUMBER="xxxxxx"
 export KUBECONFIG_PATH="~/.kube/config
 ```
-Choose the closest [GCP Region](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached/eks/reference/supported-regions) to your cluster where the multi-cloud API is available. The GCP Multi-Cloud API will be hosted in this region
+b. Choose the closest [GCP Region](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached/eks/reference/supported-regions) to your cluster where the multi-cloud API is available. The GCP Multi-Cloud API will be hosted in this region
 ```sh
 export GCP_REGION=[enter location]
 ```
-Now execute the following command to view avaiable Attached cluster versions in that region. Choose the version that matches the K8s version of your  cluster
+c. Now execute the following command to view avaiable Attached cluster versions in that region. 
 
 ```sh
 gcloud container attached get-server-config  \
   --location=$GCP_REGION
-export PLATFORM_VERSION="1.xx-gke.1"
+  ```
+ d. Enter the Attached cluster version that matches the K8s version of your  cluster
+export PLATFORM_VERSION=""
 ```
 
 ###  EKS 
 Login to your EKS cluster and get the OIDC config
 ```bash
-export AWS_REGION=""
+export AWS_REGION="us-east-"
 export CLUSTER_NAME=""
 aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
 export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text)
