@@ -1,55 +1,87 @@
 ## Attach a Cluster to GCP Anthos
+
+### Prerequisites 
+Enter the following configuration details for your attached cluster
 ```bash
-export CLUSTER_NAME="education-eks-6zZPtpwc"
-export MEMBERSHIP_NAME="eks-attached"
+export MEMBERSHIP_NAME="Attached Cluster" // this is the name that shows up in the GCP console for this cluster
+export ADMIN_EMAILS="example@example.com"
+export GCP_PROJECT_NUMBER="xxxxxx"
+export KUBECONFIG_PATH="~/.kube/config
+```
+Choose the closest [GCP Region](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached/eks/reference/supported-regions) to your cluster where the multi-cloud API is available. The GCP Multi-Cloud API will be hosted in this region
+```sh
+export GCP_REGION=[enter location]
+```
+Now execute the following command to view avaiable Attached cluster versions in that region. Choose the version that matches the K8s version of your  cluster
 
-
+```sh
+gcloud container attached get-server-config  \
+  --location=$GCP_REGION
+export PLATFORM_VERSION="1.xx-gke.1"
 ```
 
 ###  EKS 
+Login to your EKS cluster and get the OIDC config
 ```bash
-export AWS_REGION="us-east-2"
+export AWS_REGION=""
+export CLUSTER_NAME=""
 aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
-```
-
-#### Register the Cluster
-1. Get the current context which should be the cluster to register
-```bash
-export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
 export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text)
+
 ```
-
-Register the Cluster
-
-```bash
- gcloud container hub memberships register $MEMBERSHIP_NAME \
-   --context=$KUBECONFIG_CONTEXT \
-   --kubeconfig="~/.kube/config" \
-   --enable-workload-identity \
-  --public-issuer-url=$OIDC_URL
-   ```
 
 ### AKS 
-[OIDC Issuer Feature in preview](https://docs.microsoft.com/en-us/azure/aks/cluster-configuration#register-the-enableoidcissuerpreview-feature-flag)
-
+a. [OIDC Issuer Feature in preview](https://docs.microsoft.com/en-us/azure/aks/cluster-configuration#register-the-enableoidcissuerpreview-feature-flag)
 ```
 export CLUSTER_RG=""
 export CLUSTER_NAME=""
 az aks get-credentials --resource-group $CLUSTER_RG --name $CLUSTER_NAME
 ```
-
-1. Get the current context which should be the cluster to register
+b. Get the current context which should be the cluster to register
 ```bash
 export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
 export OIDC_URL=$(az aks show -n $CLUSTER_NAME -g $CLUSTER_RG --query "oidcIssuerProfile.issuerUrl" -otsv)
 ```
 
-2. 
+## Register the Cluster
+1. Get the current context which should be the cluster to register
+```bash
+export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
+```
 
-Register the Cluster
+
+
+3. Register the Cluster
+
+a. Choose your K8s distrovution(EKS or AKS for the Attached Cluster V2 product, instruction for V1 below)
+
+```sh
+export DISTROBUTION="EKS"
+```
+
+b. Register the cluster
+```sh
+
+export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
+
+gcloud container attached clusters register $MEMBERSHIP_NAME \
+  --location=$GCP_REGION \
+  --fleet-project=$GCP_PROJECT_NUMBER \
+  --platform-version=$PLATFORM_VERSION \
+  --distribution=$DISTROBUTION \
+  --issuer-url=$OIDC_URL \
+  --context=$KUBECONFIG_CONTEXT \
+  --admin-users=$ADMIN_EMAILS \
+  --kubeconfig=KUBECONFIG_PATH \
+  --description="Attached Cluster"
+```
+
+
+
+## V1 Attached Cluster Version - *Register non EKS/AKS clusters*
 
 ```bash
- gcloud container hub memberships register aks-attached \
+ gcloud container hub memberships register $MEMBERSHIP_NAME \
    --context=$KUBECONFIG_CONTEXT \
    --kubeconfig="~/.kube/config" \
    --enable-workload-identity \
@@ -101,31 +133,4 @@ Take the output yaml and apply it to the cluster. Then you can connect with a ne
 ```bash
 gcloud container hub memberships get-credentials $MEMBERSHIP_NAME
 kubectl get nodes
-```
-
-### V2 EKS Install
-```sh
-
-export ADMIN_EMAILS="example@example.com"
-export CLUSTER_NAME="education-eks-6zZPtpwc"
-export MEMBERSHIP_NAME="eks-attached-v2"
-export AWS_REGION="us-east-2"
-export PROJECT_NUMBER="xxxxxx"
-export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
-export OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text)
-
-aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
-
-gcloud alpha container attached clusters register $MEMBERSHIP_NAME \
-  --location=us-east4 \
-  --fleet-project=$PROJECT_NUMBER \
-  --platform-version=1.22.0-gke.1 \
-  --distribution=eks \
-  --issuer-url=$OIDC_URL \
-  --context=$KUBECONFIG_CONTEXT \
-  --admin-users=$ADMIN_EMAILS
-  
-  
-  [--kubeconfig=KUBECONFIG_PATH] \
-  [--description=DESCRIPTION]
 ```
