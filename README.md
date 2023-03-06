@@ -1,7 +1,9 @@
 ## Attach a Cluster to GCP Anthos
 
+The following instructions are for [EKS and AKS Clusters](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached). For [non EKS/AKS installs](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached/previous-generation/how-to/attach-kubernetes-clusters#attach-aks-kind-openshift-and-other-clusters) refer to V1 installation instructions below. 
+
 ### Prerequisites 
-a. Enter the following configuration details for your attached cluster. The MEMBERSHIP_NAME is the name that will show up in the GCP Console. The cluster name is what shows up in the EKS or AKS console. For non EKS/AKS installs refer to V1 installation instructions below. 
+a. Enter the following configuration details for your attached cluster. The MEMBERSHIP_NAME is the name that will show up in the GCP Console. The cluster name is what shows up in the EKS or AKS console. 
 ```bash
 export MEMBERSHIP_NAME="Attached Cluster" 
 export CLUSTER_NAME=""
@@ -20,6 +22,7 @@ gcloud container attached get-server-config  \
   --location=$GCP_REGION
   ```
  d. Enter the Attached cluster version that matches the K8s version of your  cluster
+```sh
 export PLATFORM_VERSION=""
 ```
 
@@ -50,9 +53,7 @@ export OIDC_URL=$(az aks show -n $CLUSTER_NAME -g $CLUSTER_RG --query "oidcIssue
 export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
 ```
 
-
-
-3. Register the Cluster
+1. Register the Cluster
 
 a. Choose your K8s distrovution(EKS or AKS for the Attached Cluster V2 product, instruction for V1 below)
 
@@ -62,9 +63,6 @@ export DISTROBUTION="EKS"
 
 b. Register the cluster
 ```sh
-
-export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
-
 gcloud container attached clusters register $MEMBERSHIP_NAME \
   --location=$GCP_REGION \
   --fleet-project=$GCP_PROJECT_NUMBER \
@@ -82,10 +80,6 @@ c. Use the connect gateway to login to the cluster through Google Cloud
 gcloud container hub memberships get-credentials $MEMBERSHIP_NAME
 kubectl get nodes
 ```
-
-
-
-
 ## V1 Attached Cluster Version - *Register non EKS/AKS clusters*
 
 a. ```bash
