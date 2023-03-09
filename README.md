@@ -44,6 +44,13 @@ az aks get-credentials --resource-group $CLUSTER_RG --name $CLUSTER_NAME
 b. Get the current context which should be the cluster to register
 ```bash
 export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
+```
+Turn on OIDC issuer in cluster if it is not already there
+```bash
+az aks update -g myResourceGroup -n myAKSCluster --enable-oidc-issuer 
+```
+Get the OIDC URL
+```bash
 export OIDC_URL=$(az aks show -n $CLUSTER_NAME -g $CLUSTER_RG --query "oidcIssuerProfile.issuerUrl" -otsv)
 ```
 
