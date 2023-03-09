@@ -9,7 +9,7 @@ export MEMBERSHIP_NAME="attached-cluster"
 export CLUSTER_NAME=""
 export ADMIN_EMAILS="example@example.com"
 export GCP_PROJECT_NUMBER="xxxxxx"
-export KUBECONFIG_PATH="~/.kube/config
+export KUBECONFIG_PATH=".kube/config"
 ```
 b. Choose the closest [GCP Region](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached/eks/reference/supported-regions) to your cluster where the multi-cloud API is available. The GCP Multi-Cloud API will be hosted in this region
 ```sh
