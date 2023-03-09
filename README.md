@@ -47,7 +47,7 @@ export KUBECONFIG_CONTEXT=$(kubectl config current-context)
 ```
 Turn on OIDC issuer in cluster if it is not already there
 ```bash
-az aks update -g myResourceGroup -n myAKSCluster --enable-oidc-issuer 
+az aks update -g $CLUSTER_RG -n $CLUSTER_NAME --enable-oidc-issuer 
 ```
 Get the OIDC URL
 ```bash
