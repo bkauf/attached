@@ -53,10 +53,10 @@ a. Get the current context which should be the cluster to register
 export KUBECONFIG_CONTEXT=$(kubectl config current-context) 
 ```
 
-b. Choose your K8s distrovution(EKS or AKS for the Attached Cluster V2 product, instruction for V1 below)
+b. Choose your K8s distrovution(eks or aks for the Attached Cluster V2 product, instruction for V1 below)
 
 ```sh
-export DISTROBUTION="EKS"
+export DISTROBUTION="eks"
 ```
 
 c. Register the cluster
