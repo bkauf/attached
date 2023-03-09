@@ -5,7 +5,7 @@ The following instructions are for [EKS and AKS Clusters](https://cloud.google.c
 ### Prerequisites 
 a. Enter the following configuration details for your attached cluster. The MEMBERSHIP_NAME is the name that will show up in the GCP Console. The cluster name is what shows up in the EKS or AKS console. 
 ```bash
-export MEMBERSHIP_NAME="Attached Cluster" 
+export MEMBERSHIP_NAME="attached-cluster" 
 export CLUSTER_NAME=""
 export ADMIN_EMAILS="example@example.com"
 export GCP_PROJECT_NUMBER="xxxxxx"
