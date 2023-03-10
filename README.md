@@ -85,6 +85,19 @@ d. Use the connect gateway to login to the cluster through Google Cloud
 gcloud container hub memberships get-credentials $MEMBERSHIP_NAME
 kubectl get nodes
 ```
+
+
+## Deregister V2 Cluster
+
+```bash
+gcloud container attached clusters delete $MEMBERSHIP_NAME \
+    --ignore-errors \
+    --allow-missing \
+    --location=$GCP_REGION
+ ```
+
+
+
 ## V1 Attached Cluster Version - *Register non EKS/AKS clusters*
 
 a. For Non EKS/AKS clusters use the registration command below
